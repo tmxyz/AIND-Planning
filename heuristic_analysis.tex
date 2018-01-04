@@ -1,0 +1,314 @@
+\documentclass[11pt]{article}
+\usepackage{pmgraph}
+\usepackage[normalem]{ulem}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+\usepackage[english]{babel}
+\usepackage{csquotes}
+\usepackage[a4paper, top=30mm, bottom=20mm, left=20mm]{geometry}
+\usepackage{amsmath}
+\usepackage{txfonts}
+\usepackage{tikz}
+\usepackage{float}
+\usepackage{underscore}
+\usepackage[math]{cellspace}
+\cellspacetoplimit 4pt
+\cellspacebottomlimit 4pt
+\usetikzlibrary{shapes,backgrounds}
+
+\usepackage[backend=biber,style=authoryear]{biblatex}
+
+\title{\vspace{-2.0cm}\textbf{Heuristic Analysis}}
+\author{Dovydas Čeilutka\\\\}
+\date{\today}
+\begin{document}
+\maketitle
+
+In this analysis an optimal plan for Problems 1, 2 and 3 is provided.
+
+\section{Optimal plans}
+
+The optimal plans for the three problems was found using \texttt{run_search.py} script.
+
+\subsection{Optimal plan for Problem 1}
+
+The optimal plan for Problem 1 is:
+
+\begin{enumerate}
+  \item Load(C1, P1, SFO)
+  \item Load(C2, P2, JFK)
+  \item Fly(P2, JFK, SFO)
+  \item Unload(C2, P2, SFO)
+  \item Fly(P1, SFO, JFK)
+  \item Unload(C1, P1, JFK)
+\end{enumerate}
+
+The plan has a length of 6.
+
+\subsection{Optimal plan for Problem 2}
+
+The optimal plan for Problem 2 is:
+
+\begin{enumerate}
+  \item Load(C2, P2, JFK)
+  \item Load(C1, P1, SFO)
+  \item Load(C3, P3, ATL)
+  \item Fly(P2, JFK, SFO)
+  \item Unload(C2, P2, SFO)
+  \item Fly(P1, SFO, JFK)
+  \item Unload(C1, P1, JFK)
+  \item Fly(P3, ATL, SFO)
+  \item Unload(C3, P3, SFO)
+\end{enumerate}
+
+The plan has a length of 9.
+
+\subsection{Optimal plan for Problem 3}
+
+The optimal plan for Problem 3 is:
+
+\begin{enumerate}
+  \item Load(C2, P2, JFK)
+  \item Load(C1, P1, SFO)
+  \item Fly(P2, JFK, ORD)
+  \item Load(C4, P2, ORD)
+  \item Fly(P1, SFO, ATL)
+  \item Load(C3, P1, ATL)
+  \item Fly(P1, ATL, JFK)
+  \item Unload(C1, P1, JFK)
+  \item Unload(C3, P1, JFK)
+  \item Fly(P2, ORD, SFO)
+  \item Unload(C2, P2, SFO)
+  \item Unload(C4, P2, SFO)
+\end{enumerate}
+
+The plan has a length of 12.
+
+\section{Comparison of results for the non-heuristic search strategies}
+
+\subsection{Problem 1}
+
+\paragraph{Ability to find optimal plan}
+
+Most of the search strategies for the Problem 1 find the optimal plan - depth first graph search and depth limited search find plans that are not optimal.
+
+\paragraph{Speed}
+
+Most of the search strategies find the solution to Problem 1 within 1 second on a modern laptop. Recursive best first search takes much longer than other asearch strategies and finds the optimal solution in 2.5 seconds.
+
+\paragraph{Overall performance}
+
+Greedy best first graph search finds the optimal solution, expands fewest nodes, does fewest node tests, generates fewest new nodes and runs fastest, therefore it has the best overall performance for Problem 1.
+
+\begin{table}[H]
+  \centering
+  \caption{Comparison of the non-heuristic search strategy performance on Problem 1}
+  \bigskip
+  \label{table:nhp1}
+  \bgroup
+  \def\arraystretch{1.5}
+  \begin{tabular}{l|c|c|c|c|c}
+    Search Strategy & Plan Length & Expansions & Goal Tests & New Nodes & Time \\
+    \hline
+    Breadth First Search & 6 & 43 & 56 & 180 & 0.03 \\
+    Breadth First Tree Search & 6 & 1458 & 1459 & 5960 & 0.86 \\
+    Depth First Graph Search & 12 & 12 & 13 & 48 & 0.01 \\
+    Depth Limited Search & 50 & 101 & 271 & 414 & 0.09 \\
+    Uniform Cost Search & 6 & 55 & 57 & 224 & 0.04 \\
+    Recursive Best First Search & 6 & 4229 & 4230 & 17029 & 2.53 \\
+    Greedy Best First Graph Search & 6 & 7 & 9 & 28 & 0.01
+  \end{tabular}
+  \egroup
+\end{table}
+
+
+\subsection{Problem 2}
+
+\paragraph{Ability to find optimal plan}
+
+Only two search strategies - breadth first search and uniform cost search - find optimal plan for Problem 2 within a reasonable timeframe (2 hours) running on a modern laptop.
+
+\paragraph{Speed}
+
+Most of the search strategies manage to find the solution to Problem 1 within 2 hours running on a modern laptop. However, the difference in speed between the search strategies is very clear - greedy best first graph search is by far the fastest of all search strategies, but it didn't manage to find the optimal path. Out of the two search strategies, which managed to find the optimal path, both breadth first search and uniform cost search are very close in terms of speed, but uniform cost search is a bit faster.
+
+\paragraph{Overall performance}
+
+The greedy best first graph search finds the expands fewest nodes, does fewest node tests, generates fewest new nodes and runs fastest, but doesn't find the optimal solution. If speed and memory usage are important factors and finding the optimal solution is not necessary, then it is the best search strategy.
+
+In case where finding the optmal solution is necessary, breadth first search or uniform cost search strategies are very close in all the performance metrics, therefore either one can be used.
+
+\begin{table}[H]
+  \centering
+  \caption{Comparison of the non-heuristic search strategy performance on Problem 2}
+  \bigskip
+  \label{table:nhp2}
+  \bgroup
+  \def\arraystretch{1.5}
+  \begin{tabular}{l|c|c|c|c|c}
+    Search Strategy & Plan Length & Expansions & Goal Tests & New Nodes & Time \\
+    \hline
+    Breadth First Search & 9 & 3343 & 4609 & 30509 & 13.12 \\
+    Breadth First Tree Search & NA & NA & NA & NA & NA \\
+    Depth First Graph Search & 1444 & 1669 & 1670 & 14863 & 13.21 \\
+    Depth Limited Search & 50 & 222719 & 2053741 & 2054119 & 1561.31 \\
+    Uniform Cost Search & 9 & 4852 & 4854 & 44030 & 12.65 \\
+    Recursive Best First Search & NA & NA & NA & NA & NA \\
+    Greedy Best First Graph Search & 21 & 990 & 992 & 8910 & 2.52
+  \end{tabular}
+  \egroup
+\end{table}
+
+\subsection{Problem 3}
+
+\paragraph{Ability to find optimal plan}
+
+The results are very similar as in Problem 2 - only two search strategies - breadth first search and uniform cost search - find optimal plan for Problem 3 within a reasonable timeframe (2 hours) running on a modern laptop.
+
+\paragraph{Speed}
+
+Four strategies managed to find the solution within a reasonable timeframe (2 hours) running on a modern laptop and three failed. The depth first graph search is by far the fastest, but didn't find the optimal path. Out of the two search strategies, which managed to find the optimal path, uniform cost search is about 30\% faster than breadth first search. 
+
+\paragraph{Overall performance}
+
+The depth first graph search finds the expands fewest nodes, does fewest node tests, generates fewest new nodes and runs fastest, but doesn't find the optimal solution. If speed and memory usage are important factors and finding the optimal solution is not necessary, then it is the best search strategy.
+
+In case where finding the optmal solution is necessary, uniform cost search strategy is faster than breadth first search, but expand and generate more nodes, therefore the strategy should be chosen based on what is more important - speed or memory.
+
+\begin{table}[H]
+  \centering
+  \caption{Comparison of the non-heuristic search strategy performance on Problem 3}
+  \bigskip
+  \label{table:nhp3}
+  \bgroup
+  \def\arraystretch{1.5}
+  \begin{tabular}{l|c|c|c|c|c}
+    Search Strategy & Plan Length & Expansions & Goal Tests & New Nodes & Time \\
+    \hline
+    Breadth First Search & 12 & 14663 & 18098 & 129631 & 150.25 \\
+    Breadth First Tree Search & NA & NA & NA & NA & NA \\
+    Depth First Graph Search & 571 & 592 & 593 & 4927 & 4.04 \\
+    Depth Limited Search & NA & NA & NA & NA & NA \\
+    Uniform Cost Search & 12 & 18235 & 18237 & 159716 & 104.76 \\
+    Recursive Best First Search & NA & NA & NA & NA & NA \\
+    Greedy Best First Graph Search & 22 & 5614 & 5616 & 49429 & 34.95
+  \end{tabular}
+  \egroup
+\end{table}
+
+\section{Comparison of results for heuristic search result strategies}
+
+\subsection{Problem 1}
+
+\paragraph{Ability to find optimal plan}
+
+All of the heuristic search strategies find the optimal plan.
+
+\paragraph{Speed}
+
+A* with search level sum heuristic is the slowest of the three algorithms, but still manages to find the optimal solution in less than 1 second.
+
+\paragraph{Overall performance}
+
+All of the heuristic search strategies find the optimal plan. A* with search level sum heuristic is the most memory efficient, but slowest. A* search with H1 heuristic and A* search with ignore preconditions heuristic are much faster, but use about five times more memory.
+
+\begin{table}[H]
+  \centering
+  \caption{Comparison of the non-heuristic search strategy performance on Problem 1}
+  \bigskip
+  \label{table:hp1}
+  \bgroup
+  \def\arraystretch{1.5}
+  \begin{tabular}{p{3.7cm}|c|c|c|c|c}
+    Search Strategy & Plan Length & Expansions & Goal Tests & New Nodes & Time \\
+    \hline
+    A* Search H1 & 6 & 55 & 57 & 224 & 0.04 \\
+    A* Search Ignore Preconditions & 6 & 41 & 43 & 170 & 0.04 \\
+    A* Search Level Sum & 6 & 11 & 13 & 50 & 0.64 \\
+  \end{tabular}
+  \egroup
+\end{table}
+
+
+\subsection{Problem 2}
+
+\paragraph{Ability to find optimal plan}
+
+All of the heuristic search strategies find the optimal plan.
+
+\paragraph{Speed}
+
+A* search with ignore preconditions heuristic is the fastest, A* search with H1 heuristic is about two and a half times slower and A* with search level sum heuristic is about seventeen times slower.
+
+\paragraph{Overall performance}
+
+All of the heuristic search strategies find the optimal plan. A* search with ignore preconditions heuristic is the fastest, but also uses twenty times more memory than A* with search level sum heuristic, which is the most memory efficient, but slowest. A* search with H1 heuristic uses the most memory and is the second fastest.
+
+\begin{table}[H]
+  \centering
+  \caption{Comparison of the non-heuristic search strategy performance on Problem 2}
+  \bigskip
+  \label{table:hp2}
+  \bgroup
+  \def\arraystretch{1.5}
+  \begin{tabular}{p{3.7cm}|c|c|c|c|c}
+    Search Strategy & Plan Length & Expansions & Goal Tests & New Nodes & Time \\
+    \hline
+    A* Search H1 & 9 & 4852 & 4854 & 44030 & 13.18 \\
+    A* Search Ignore Preconditions & 9 & 1450 & 1452 & 13303 & 5.07 \\
+    A* Search Level Sum & 9 & 86 & 88 & 841 & 85.84 \\
+  \end{tabular}
+  \egroup
+\end{table}
+
+\subsection{Problem 3}
+
+\paragraph{Ability to find optimal plan}
+
+All of the heuristic search strategies find the optimal plan.
+
+\paragraph{Speed}
+
+A* search with ignore preconditions heuristic is the fastest, A* search with H1 heuristic is about two and a half times slower and A* with search level sum heuristic is about fourteen times slower.
+
+\paragraph{Overall performance}
+
+All of the heuristic search strategies find the optimal plan. A* search with ignore preconditions heuristic is the fastest, but also uses fifteen times more memory than A* with search level sum heuristic, which is the most memory efficient, but slowest. A* search with H1 heuristic uses the most memory and is the second fastest.
+
+\begin{table}[H]
+  \centering
+  \caption{Comparison of the non-heuristic search strategy performance on Problem 3}
+  \bigskip
+  \label{table:hp3}
+  \bgroup
+  \def\arraystretch{1.5}
+  \begin{tabular}{p{3.7cm}|c|c|c|c|c}
+    Search Strategy & Plan Length & Expansions & Goal Tests & New Nodes & Time \\
+    \hline
+    A* Search H1 & 12 & 18235 & 18237 & 159716 & 116.88 \\
+    A* Search Ignore Preconditions & 12 & 5040 & 5042 & 44944 & 41.97 \\
+    A* Search Level Sum & 12 & 318 & 320 & 2934 & 594.95 \\
+  \end{tabular}
+  \egroup
+\end{table}
+
+
+\section{Comparison of results for all search result strategies}
+
+\subsection{Ability to find optimal plan}
+
+All of the heuristic search strategies find the optimal plan, but only two of non-heuristic search strategies do: breadth first search and uniform cost search.
+
+\subsection{Speed}
+
+A* search with ignore preconditions heuristic is the fastest of the heuristic search strategies, while uniform cost search is the fastest of the non-heuristic search strategies.
+
+\paragraph{Overall performance}
+
+While comparing the heuristic vs non-heuristic search strategies it is clear that heuristic strategies are supperior to non-heuristic ones for all problems. A* search with ignore preconditions heuristic is several times faster and memory efficient than the uniform cost search (the best non-heuristic strategy). In case where memory efficiency is very important, A* level sum search does fewest node expansions and creates fewest nodes significantly outperforming any non-heuristic strategy (including non-optimal ones).
+
+\section{Conclusion and recommendations}
+
+The detailed analysis of the search strategies showed that the heuristic search strategies have a clear advantage. Based on the analysis done in this paper A* search with ignore preconditions heuristic is determined to be the best search strategy for all cases, except when memory efficiency is very important, where A* level sum search is the best.
+
+\end{document}
