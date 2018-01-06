@@ -173,7 +173,7 @@ Four strategies managed to find the solution within a reasonable timeframe (2 ho
 
 The depth first graph search finds the expands fewest nodes, does fewest node tests, generates fewest new nodes and runs fastest, but doesn't find the optimal solution. If speed and memory usage are important factors and finding the optimal solution is not necessary, then it is the best search strategy.
 
-In case where finding the optmal solution is necessary, uniform cost search strategy is faster than breadth first search, but expand and generate more nodes, therefore the strategy should be chosen based on what is more important - speed or memory.
+In case where finding the optmal solution is necessary, uniform cost search strategy is faster than breadth first search, but expand and generate more nodes, therefore the strategy should be chosen based on what is more important - speed or memory. The fact that the uniform cost search is faster than the breadth first search is rather surprising as in the analysed cases where the step cost is the same, the uniform cost search should be identical to breadth cost search with an exception of the how the node epansion works (uniform cost expands more nodes). This suggests that uniform cost search should be slower than breadth first search. The proposed explanation for this weird result is that the actual implementation of the both strategies are causing this issue.
 
 \begin{table}[H]
   \centering
