@@ -1,0 +1,48 @@
+\documentclass[11pt]{article}
+  \usepackage{pmgraph}
+  \usepackage[normalem]{ulem}
+  \usepackage[utf8]{inputenc}
+  \usepackage{lmodern}
+  \usepackage[english]{babel}
+  \usepackage{csquotes}
+  \usepackage[a4paper, top=30mm, bottom=20mm, left=20mm]{geometry}
+  \usepackage{amsmath}
+  \usepackage{txfonts}
+  \usepackage{tikz}
+  \usepackage{float}
+  \usepackage{underscore}
+  \usepackage[math]{cellspace}
+  \cellspacetoplimit 4pt
+  \cellspacebottomlimit 4pt
+  \usetikzlibrary{shapes,backgrounds}
+
+  \usepackage[backend=biber,style=authoryear]{biblatex}
+  \bibliography{cite}
+
+  \title{\vspace{-2.0cm}\textbf{Research Review}}
+  \author{Dovydas Čeilutka\\\\}
+  \date{\today}
+  \begin{document}
+  \maketitle
+
+  In this research review three important developments in the classical planning are analysed and their impact on the artificial intelligence field is summarized. SATPlan, Graphplan and Blackbox planning systems and their influences are reviewed.
+  
+  \section{SATPlan}
+  
+  SATPlan was the first planning strategy, which implemented the idea that planning problems can be tackled as a general propositional satisfiability problems instead of deduction problems and did not require specialized algorithms to solve \autocite{kautz1992planning, kautz1996pushing}. Moreover, SATPlan was more flexible and as performant as the best of the specialized planning systems. The use of logical representation that has good computational properties and powerful algorithms such as Walksat were the two major factors, which led to the success and popularity of the SATPlan system \autocite{kautz1999unifying}. SATPlan takes a set of axiom schemas as its input and creates a general conjunctive normal form to represent the mutex relationships.
+  
+  \section{Graphplan}
+  
+  \cite{blum1997fast} presented a new graph-planning system called Graphplan, which was much faster than the  state of the art partial-order planning algorithms, which were the most popular type of planning algorithms at that time \autocite{russell2010artificial}. What made the Graphplan unique is the fact that the algorithm would first construct a planning graph instead of trying to find the solution right away like other planning methods. The planning graph can be constructed very quickly (in polynomial time), do not take up much space (polynomial size) and allows the reduction of the constrains of the problem due the way they are encoding the problem. SATPlan and Graphplan systems were quite similar and the main practical difference is how each of the systems create the propositional structure: Graphplan creates a plan graph and SATPlan creates a CNF wff \autocite{kautz1999unifying}.
+  
+  \section{Blackbox}
+  
+  The Blackbox planning system combined the best features of Graphplan and SATPlan \autocite{kautz1999unifying}. The authors show that this combination has superior performance than each of its predecesors.
+  
+  \section{The impact on the AI field}
+  
+  Planning problems are very important part of the artificial intelligence field \autocite{russell2010artificial}. SATPlan and Graphplan were very powerful planning systems, which fundamentaly changed how the planning problems are solved. Blackbox is an improvement on these systems, which takes the best ideas from both and thus has superior preformance than either one of its predecesors.
+  
+  \printbibliography
+
+  \end{document}
