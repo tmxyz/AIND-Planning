@@ -17,6 +17,7 @@
 \usetikzlibrary{shapes,backgrounds}
 
 \usepackage[backend=biber,style=authoryear]{biblatex}
+\bibliography{cite}
 
 \title{\vspace{-2.0cm}\textbf{Heuristic Analysis}}
 \author{Dovydas Čeilutka\\\\}
@@ -24,11 +25,19 @@
 \begin{document}
 \maketitle
 
-In this analysis an optimal plan for Problems 1, 2 and 3 is provided.
+In this paper the three planning problems are tackled using the uninformed search strategies and then using heuristic (informed) search strategies. The search strategies are evaluated by their ability to find the optimal plan, speed and memory-efficiency. The performance is then compared between and within the groups of search strategies. Moreover, the strategies are used to find optimal plans for the problems.
+
+\paragraph{Software}
+
+Due to the nature of the exercise the quality of the hardware and the efficiency of the software have major impact on the measurements. A rather minor part of the software was coded by the autor of this paper with the other portion of the software being provided by Udacity. Python 3.6 on macOS High Sierra is used for running all the scripts.
+
+\paragraph{Hardware}
+
+As for the hardware the code was run on a modern laptop with 2.7 GHz Intel Core i7 processor and 16 GB of RAM.
 
 \section{Optimal plans}
 
-The optimal plans for the three problems was found using \texttt{run_search.py} script.
+The optimal plans for the three problems were found by running \texttt{run_search.py} script using breadth-first search. The breadth-first search was chosen, because it is complete and optimal, thus it is guaranteed to eventually find the optimal solution \autocite{russell2010artificial}.
 
 \subsection{Optimal plan for Problem 1}
 
@@ -84,25 +93,55 @@ The optimal plan for Problem 3 is:
 
 The plan has a length of 12.
 
-\section{Comparison of results for the non-heuristic search strategies}
+\section{Uninformed search strategies}
+
+In this section these four uninformed (blind) search strategies are compared in their ability to solve problems 1 - 3:
+
+\begin{enumerate}
+  \item Breadth-first search
+  \item Uniform-cost search
+  \item Depth-first graph search
+  \item Depth-limited search
+\end{enumerate}
+
+\subsection{Comparison of the uninformed search strategies}
+
+\cite{russell2010artificial} suggest evaluating the performance of the search strategies using these four criteria:
+
+\begin{enumerate}
+  \item Completeness: Is the algorithm guaranteed to find a solution when there is one?
+  \item Optimality: Does the strategy find the optimal solution?
+  \item Time complexity: How long does it take to find a solution?
+  \item Space complexity: How much memory is needed to perform the search?
+\end{enumerate}
+
+\textbf{Breadth-first search} is an instance of the general graph-search algorithm which expands the shallowest nodes first. It is \textbf{complete} if $b$ is finite and \textbf{optimal} if step costs are identical. It has exponential time complexity $O(b^d)$ and exponential space complexity $O(b^d)$, where $b$ is a branching factor and $d$ is the depth \autocite{russell2010artificial}.
+
+\textbf{Uniform-cost search} is an extension of the breadth-first search strategy, which is \textbf{optimal} for any step-cost function. The uniform-cost strategy expands not the shallowest node, but the node with the lowest path cost and does the goal test when the node is selected for expansion. The \textbf{completeness} characteristic is retained. It has exponential time complexity $O(b^{1 + [C^* / \epsilon]})$ and exponential space complexity $O(b^{1 + [C^* / \epsilon]})$ where $b$ is a branching factor and $C*$ is a cost of the optimal solution and $\epsilon$ is the lowest allowed cost of a path (required to avoid getting stuck in an infinite series of 0-cost steps) \autocite{russell2010artificial}.
+
+\textbf{Depth-first graph search} expands the deepest node first. It is \textbf{complete} in finite state spaces, but not optimal. Time and space complexity remain the same as in the breadth-first search: time complexity is $O(b^d)$ and the space complexity is $O(b^d)$, where $b$ is a branching factor and $d$ is the depth \autocite{russell2010artificial}.
+
+\textbf{Depth-limited search} is an improvement on the depth-first (graph) search that has a predetermined depth limit $l$. The nodes below the $l$ level are ignored. It is not complete and not optimal. Time complexity is $O(b^l)$ and the space complexity is $O(b^l)$, where $b$ is a branching factor and $l$ is the cutoff depth \autocite{russell2010artificial}.
 
 \subsection{Problem 1}
 
-\paragraph{Ability to find optimal plan}
+The results of the uninformed search strategies performance on Problem 1 are summarized in \ref{table:nhp1}.
 
-Most of the search strategies for the Problem 1 find the optimal plan - depth first graph search and depth limited search find plans that are not optimal.
+\paragraph{Optimality}
 
-\paragraph{Speed}
+The breadth-frst and uniform-cost search strategies were able to find the optimal plan for the Problem 1. The depth-first graph search and depth-limited search found plans that are not optimal. The results are in accordance with the theoretical performance of the search strategies as depth-first search strategies are not optimal.
 
-Most of the search strategies find the solution to Problem 1 within 1 second on a modern laptop. Recursive best first search takes much longer than other asearch strategies and finds the optimal solution in 2.5 seconds.
+\paragraph{Time complexity}
 
-\paragraph{Overall performance}
+All of the search strategies found the solution to Problem 1 within 0.1 second.
 
-Greedy best first graph search finds the optimal solution, expands fewest nodes, does fewest node tests, generates fewest new nodes and runs fastest, therefore it has the best overall performance for Problem 1.
+\paragraph{Space complexity}
+
+The depth-first graph search had the best space complexity performance, while the depth-limited search performed the worst.
 
 \begin{table}[H]
   \centering
-  \caption{Comparison of the non-heuristic search strategy performance on Problem 1}
+  \caption{Comparison of the uninformed search strategies performance on Problem 1}
   \bigskip
   \label{table:nhp1}
   \bgroup
@@ -110,37 +149,33 @@ Greedy best first graph search finds the optimal solution, expands fewest nodes,
   \begin{tabular}{l|c|c|c|c|c}
     Search Strategy & Plan Length & Expansions & Goal Tests & New Nodes & Time \\
     \hline
-    Breadth First Search & 6 & 43 & 56 & 180 & 0.03 \\
-    Breadth First Tree Search & 6 & 1458 & 1459 & 5960 & 0.86 \\
-    Depth First Graph Search & 12 & 12 & 13 & 48 & 0.01 \\
-    Depth Limited Search & 50 & 101 & 271 & 414 & 0.09 \\
-    Uniform Cost Search & 6 & 55 & 57 & 224 & 0.04 \\
-    Recursive Best First Search & 6 & 4229 & 4230 & 17029 & 2.53 \\
-    Greedy Best First Graph Search & 6 & 7 & 9 & 28 & 0.01
+    Breadth-First Search & 6 & 43 & 56 & 180 & 0.03 \\
+    Uniform-Cost Search & 6 & 55 & 57 & 224 & 0.04 \\
+    Depth-First Graph Search & 12 & 12 & 13 & 48 & 0.01 \\
+    Depth-Limited Search & 50 & 101 & 271 & 414 & 0.09 \\
   \end{tabular}
   \egroup
 \end{table}
 
-
 \subsection{Problem 2}
 
-\paragraph{Ability to find optimal plan}
+TThe results of the uninformed search strategies performance on Problem 2 are summarized in \ref{table:nhp2}.
 
-Only two search strategies - breadth first search and uniform cost search - find optimal plan for Problem 2 within a reasonable timeframe (2 hours) running on a modern laptop.
+\paragraph{Optimality}
 
-\paragraph{Speed}
+Again, the breadth-first search and uniform-cost search strategies found the optimal plans, while the depth-first graph search and depth-limited search found plans that are not optimal.
 
-Most of the search strategies manage to find the solution to Problem 1 within 2 hours running on a modern laptop. However, the difference in speed between the search strategies is very clear - greedy best first graph search is by far the fastest of all search strategies, but it didn't manage to find the optimal path. Out of the two search strategies, which managed to find the optimal path, both breadth first search and uniform cost search are very close in terms of speed, but uniform cost search is a bit faster.
+\paragraph{Time complexity}
 
-\paragraph{Overall performance}
+Most of the search strategies manage to find the solution to Problem 1 within 14 seconds, however the depth-limited search returned the result only after 1561 seconds. One surprising result is that the uniform-cost search performed better than the breadth-first search - in theory it should be the other way around. It is suspected that in this case this is caused by the code implementation of these two algorithms.
 
-The greedy best first graph search finds the expands fewest nodes, does fewest node tests, generates fewest new nodes and runs fastest, but doesn't find the optimal solution. If speed and memory usage are important factors and finding the optimal solution is not necessary, then it is the best search strategy.
+\paragraph{Space complexity}
 
-In case where finding the optmal solution is necessary, breadth first search or uniform cost search strategies are very close in all the performance metrics, therefore either one can be used.
+The depth-first graph search has the best space complexity while the depth-limited search performs the worst. Uniform-cost search strategy has worse space complexity than the breadth-first search strategy.
 
 \begin{table}[H]
   \centering
-  \caption{Comparison of the non-heuristic search strategy performance on Problem 2}
+  \caption{Comparison of the uninformed search strategies performance on Problem 2}
   \bigskip
   \label{table:nhp2}
   \bgroup
@@ -148,36 +183,33 @@ In case where finding the optmal solution is necessary, breadth first search or 
   \begin{tabular}{l|c|c|c|c|c}
     Search Strategy & Plan Length & Expansions & Goal Tests & New Nodes & Time \\
     \hline
-    Breadth First Search & 9 & 3343 & 4609 & 30509 & 13.12 \\
-    Breadth First Tree Search & NA & NA & NA & NA & NA \\
-    Depth First Graph Search & 1444 & 1669 & 1670 & 14863 & 13.21 \\
-    Depth Limited Search & 50 & 222719 & 2053741 & 2054119 & 1561.31 \\
-    Uniform Cost Search & 9 & 4852 & 4854 & 44030 & 12.65 \\
-    Recursive Best First Search & NA & NA & NA & NA & NA \\
-    Greedy Best First Graph Search & 21 & 990 & 992 & 8910 & 2.52
+    Breadth-First Search & 9 & 3343 & 4609 & 30509 & 13.12 \\
+    Uniform-Cost Search & 9 & 4852 & 4854 & 44030 & 12.65 \\
+    Depth-First Graph Search & 1444 & 1669 & 1670 & 14863 & 13.21 \\
+    Depth-Limited Search & 50 & 222719 & 2053741 & 2054119 & 1561.31 \\
   \end{tabular}
   \egroup
 \end{table}
 
 \subsection{Problem 3}
 
-\paragraph{Ability to find optimal plan}
+The results of the uninformed search strategies performance on Problem 3 are summarized in \ref{table:nhp3}. The depth-limited search was unable to finish running within a reasonable time-frame (1 hour).
 
-The results are very similar as in Problem 2 - only two search strategies - breadth first search and uniform cost search - find optimal plan for Problem 3 within a reasonable timeframe (2 hours) running on a modern laptop.
+\paragraph{Optimality}
 
-\paragraph{Speed}
+Again, only two search strategies - the breadth-first search and uniform-cost search - found the optimal plan for Problem 3.
 
-Four strategies managed to find the solution within a reasonable timeframe (2 hours) running on a modern laptop and three failed. The depth first graph search is by far the fastest, but didn't find the optimal path. Out of the two search strategies, which managed to find the optimal path, uniform cost search is about 30\% faster than breadth first search. 
+\paragraph{Time complexity}
 
-\paragraph{Overall performance}
+The depth-first graph search was the fastest algorithm, while the breadth-first search was the slowest.
 
-The depth first graph search finds the expands fewest nodes, does fewest node tests, generates fewest new nodes and runs fastest, but doesn't find the optimal solution. If speed and memory usage are important factors and finding the optimal solution is not necessary, then it is the best search strategy.
+\paragraph{Space complexity}
 
-In case where finding the optmal solution is necessary, uniform cost search strategy is faster than breadth first search, but expand and generate more nodes, therefore the strategy should be chosen based on what is more important - speed or memory. The fact that the uniform cost search is faster than the breadth first search is rather surprising as in the analysed cases where the step cost is the same, the uniform cost search should be identical to breadth cost search with an exception of the how the node epansion works (uniform cost expands more nodes). This suggests that uniform cost search should be slower than breadth first search. The proposed explanation for this weird result is that the actual implementation of the both strategies are causing this issue.
+The depth-first graph search has the best space complexity while the uniform-cost search perfomed the worst.
 
 \begin{table}[H]
   \centering
-  \caption{Comparison of the non-heuristic search strategy performance on Problem 3}
+  \caption{Comparison of the uninformed search strategies performance on Problem 3}
   \bigskip
   \label{table:nhp3}
   \bgroup
@@ -185,36 +217,52 @@ In case where finding the optmal solution is necessary, uniform cost search stra
   \begin{tabular}{l|c|c|c|c|c}
     Search Strategy & Plan Length & Expansions & Goal Tests & New Nodes & Time \\
     \hline
-    Breadth First Search & 12 & 14663 & 18098 & 129631 & 150.25 \\
-    Breadth First Tree Search & NA & NA & NA & NA & NA \\
-    Depth First Graph Search & 571 & 592 & 593 & 4927 & 4.04 \\
-    Depth Limited Search & NA & NA & NA & NA & NA \\
-    Uniform Cost Search & 12 & 18235 & 18237 & 159716 & 104.76 \\
-    Recursive Best First Search & NA & NA & NA & NA & NA \\
-    Greedy Best First Graph Search & 22 & 5614 & 5616 & 49429 & 34.95
+    Breadth-First Search & 12 & 14663 & 18098 & 129631 & 150.25 \\
+    Uniform-Cost Search & 12 & 18235 & 18237 & 159716 & 104.76 \\
+    Depth-First Graph Search & 571 & 592 & 593 & 4927 & 4.04 \\
+    Depth-Limited Search & NA & NA & NA & NA & NA \\
   \end{tabular}
   \egroup
 \end{table}
 
-\section{Comparison of results for heuristic search result strategies}
+\section{Heuristic search result strategies}
+
+In this section these four heuristic (informed) search strategies are compared in their ability to solve problems 1 - 3:
+
+\begin{enumerate}
+  \item Greedy Best-First Graph Search
+  \item Recursive Best-First Search
+  \item A* Search Ignore Preconditions
+  \item A* Search Level Sum
+\end{enumerate}
+
+\textbf{Greedy best-first graph search} is an informed search strategy, which expands the node closest to the goal. This strategy is not \textbf{optimal} \autocite{russell2010artificial}.
+
+\textbf{Recursive best-first search} is an algorithm similar to recursive depth-first search, uses linear space and tries to mimic the operation of the standard best-first search. It is \textbf{optimal} and can solve problems, which are not solvable using A* due to memory limitations \autocite{russell2010artificial}.
+
+\textbf{A* search with ignore preconditions heuristic} is an A* search strategy, which uses a heuristic funtion $h$, which returns the number of unsatisfied goals.
+
+\textbf{A* search with level sum heuristic} is an A* search strategy, which uses a heuristic funtion $h$, which returns the sum of the levels in which the goals are in.
 
 \subsection{Problem 1}
 
-\paragraph{Ability to find optimal plan}
+The results of the heuristic search strategies performance on Problem 1 are summarized in \ref{table:hp1}.
 
-All of the heuristic search strategies find the optimal plan.
+\paragraph{Optimality}
 
-\paragraph{Speed}
+All of the heuristic search strategies found the optimal plan for the Problem 1.
 
-A* with search level sum heuristic is the slowest of the three algorithms, but still manages to find the optimal solution in less than 1 second.
+\paragraph{Time complexity}
 
-\paragraph{Overall performance}
+The recursive best-first search was the slowest (2.53 seconds) of the four algorithms, while greedy best-first graph search found the solution in 0.01 second.
 
-All of the heuristic search strategies find the optimal plan. A* with search level sum heuristic is the most memory efficient, but slowest. A* search with H1 heuristic and A* search with ignore preconditions heuristic are much faster, but use about five times more memory.
+\paragraph{Space complexity}
+
+The greedy best-first graph search is the most memory efficient and the recursive best-first search had the worst space complexity. The difference in the results is huge the greedy best-first graph search expanded 600 times fewer nodes than the recursive best-first search. 
 
 \begin{table}[H]
   \centering
-  \caption{Comparison of the non-heuristic search strategy performance on Problem 1}
+  \caption{Comparison of the heuristic search strategy performance on Problem 1}
   \bigskip
   \label{table:hp1}
   \bgroup
@@ -222,31 +270,33 @@ All of the heuristic search strategies find the optimal plan. A* with search lev
   \begin{tabular}{p{3.7cm}|c|c|c|c|c}
     Search Strategy & Plan Length & Expansions & Goal Tests & New Nodes & Time \\
     \hline
-    A* Search H1 & 6 & 55 & 57 & 224 & 0.04 \\
+    Greedy Best-First Graph Search & 6 & 7 & 9 & 28 & 0.01 \\
+    Recursive Best-First Search & 6 & 4229 & 4230 & 17029 & 2.53 \\
     A* Search Ignore Preconditions & 6 & 41 & 43 & 170 & 0.04 \\
     A* Search Level Sum & 6 & 11 & 13 & 50 & 0.64 \\
   \end{tabular}
   \egroup
 \end{table}
 
-
 \subsection{Problem 2}
 
-\paragraph{Ability to find optimal plan}
+The results of the heuristic search strategies performance on Problem 2 are summarized in \ref{table:hp2}. The recursive best-first search was unable to finish running within a reasonable time-frame (1 hour).
 
-All of the heuristic search strategies find the optimal plan.
+\paragraph{Optimality}
 
-\paragraph{Speed}
+A* search with ignore preconditions heuristic and A* search with level sum heuristic found the optimal plan while the greedy best-first graph search did not.
 
-A* search with ignore preconditions heuristic is the fastest, A* search with H1 heuristic is about two and a half times slower and A* with search level sum heuristic is about seventeen times slower.
+\paragraph{Time complexity}
 
-\paragraph{Overall performance}
+Again, the greedy best-first graph search was the fastest algorithm. The A* search with ignore preconditions heuristic was about 2 times slower and the A* search with level sum heuristic was around 35 times slower.
 
-All of the heuristic search strategies find the optimal plan. A* search with ignore preconditions heuristic is the fastest, but also uses twenty times more memory than A* with search level sum heuristic, which is the most memory efficient, but slowest. A* search with H1 heuristic uses the most memory and is the second fastest.
+\paragraph{Space complexity}
+
+In the case of Problem 2 the most memory efficient strategy is the A* search with level sum heuristic. It expanded around 11 times fewer nodes than the greedy best-first graph search and around 17 times fewer nodes than the A* search with ignore preconditions heuristic.
 
 \begin{table}[H]
   \centering
-  \caption{Comparison of the non-heuristic search strategy performance on Problem 2}
+  \caption{Comparison of the heuristic search strategy performance on Problem 2}
   \bigskip
   \label{table:hp2}
   \bgroup
@@ -254,7 +304,8 @@ All of the heuristic search strategies find the optimal plan. A* search with ign
   \begin{tabular}{p{3.7cm}|c|c|c|c|c}
     Search Strategy & Plan Length & Expansions & Goal Tests & New Nodes & Time \\
     \hline
-    A* Search H1 & 9 & 4852 & 4854 & 44030 & 13.18 \\
+    Greedy Best-First Graph Search & 21 & 990 & 992 & 8910 & 2.52 \\
+    Recursive Best-First Search & NA & NA & NA & NA & NA \\
     A* Search Ignore Preconditions & 9 & 1450 & 1452 & 13303 & 5.07 \\
     A* Search Level Sum & 9 & 86 & 88 & 841 & 85.84 \\
   \end{tabular}
@@ -263,21 +314,23 @@ All of the heuristic search strategies find the optimal plan. A* search with ign
 
 \subsection{Problem 3}
 
-\paragraph{Ability to find optimal plan}
+The results of the heuristic search strategies performance on Problem 2 are summarized in \ref{table:hp3}. The recursive best-first search was unable to finish running within a reasonable time-frame (1 hour).
 
-All of the heuristic search strategies find the optimal plan.
+\paragraph{Optimality}
 
-\paragraph{Speed}
+Again, the A* search with ignore preconditions heuristic and A* search with level sum heuristic found the optimal plan while the greedy best-first graph search did not.
 
-A* search with ignore preconditions heuristic is the fastest, A* search with H1 heuristic is about two and a half times slower and A* with search level sum heuristic is about fourteen times slower.
+\paragraph{Time complexity}
 
-\paragraph{Overall performance}
+Again, the greedy best-first graph search was the fastest algorithm. The A* search with ignore preconditions heuristic was about 1.2 times slower and the A* search with level sum heuristic was around 17 times slower. The difference in the results in this problem is significantly smaller than in Problem 2.
 
-All of the heuristic search strategies find the optimal plan. A* search with ignore preconditions heuristic is the fastest, but also uses fifteen times more memory than A* with search level sum heuristic, which is the most memory efficient, but slowest. A* search with H1 heuristic uses the most memory and is the second fastest.
+\paragraph{Space complexity}
+
+In this problem the most memory efficient strategy is again the A* search with level sum heuristic. It expanded around 18 times fewer nodes than the greedy best-first graph search and around 16 times fewer nodes than the A* search with ignore preconditions heuristic.
 
 \begin{table}[H]
   \centering
-  \caption{Comparison of the non-heuristic search strategy performance on Problem 3}
+  \caption{Comparison of the heuristic search strategy performance on Problem 3}
   \bigskip
   \label{table:hp3}
   \bgroup
@@ -285,30 +338,70 @@ All of the heuristic search strategies find the optimal plan. A* search with ign
   \begin{tabular}{p{3.7cm}|c|c|c|c|c}
     Search Strategy & Plan Length & Expansions & Goal Tests & New Nodes & Time \\
     \hline
-    A* Search H1 & 12 & 18235 & 18237 & 159716 & 116.88 \\
+    Greedy Best-First Graph Search & 22 & 5614 & 5616 & 49429 & 34.95 \\
+    Recursive Best-First Search & NA & NA & NA & NA & NA \\
     A* Search Ignore Preconditions & 12 & 5040 & 5042 & 44944 & 41.97 \\
     A* Search Level Sum & 12 & 318 & 320 & 2934 & 594.95 \\
   \end{tabular}
   \egroup
 \end{table}
 
-
 \section{Comparison of results for all search result strategies}
 
-\subsection{Ability to find optimal plan}
+After analysing the performance of the informed and uninformed search strategies it is clear that most of them have their advantages and disadvantages. Some strategies are optimal, but are slow and not memory efficient, while others are not optimal but have geat memory efficiency or are very fast. In the following subsections the search strategies are compared taking one of the criteria (e.g. optimal) as the primary factor and then comparing the search strategies on the other criteria. This way it is easy to determine which search strategy ought to be used in different cases - if optimality is essential then which of the optimal search strategies have the best memory and speed complexity. On the other hand if the memory is the limiting factor, which of the search strategies can find the optimal solution and which of them can find any solution in the shortest amount of time.
 
-All of the heuristic search strategies find the optimal plan, but only two of non-heuristic search strategies do: breadth first search and uniform cost search.
+\subsection{Optimality}
 
-\subsection{Speed}
+The optimality results are in accordance with the theory - the algorithms based on breadth-first search (breadth-first search, uniform-cost search and A* search) are guaranteed to find the optimal plan. The depth-first search and best-first search strategies sometimes managed to find the optimal plans, but often did not. Thus, if optimality is essential the breadth-first search strategies are the best choice. Not surprisingly the heuristic algorithms outperformed the uninformed search strategies.
 
-A* search with ignore preconditions heuristic is the fastest of the heuristic search strategies, while uniform cost search is the fastest of the non-heuristic search strategies.
+\paragraph{Time complexity}
+
+The A* search with ignore preconditions heuristic is the fastest of the optimal search strategies. For the analysed problems it is 2-3 times faster than the uninformed breadth-first and uniform-cost search strategies. A* search with level sum heuristic is the slowest of the optimal search strategies and can be more than 10 times slower than the A* search with ignore preconditions heuristic for the analysed problems. 
+
+\paragraph{Memory complexity}
+
+The A* search with level sum heuristic is by far the most memory efficient optimal search strategy. It expanded more than 10 times fewer nodes than the A* search with ignore preconditions heuristic, around 45 times fewer nodes than the breadth-first search and 55 times fewer nodes than the uniform-cost search.
 
 \paragraph{Overall performance}
 
-While comparing the heuristic vs non-heuristic search strategies it is clear that heuristic strategies are supperior to non-heuristic ones for all problems. A* search with ignore preconditions heuristic is several times faster and memory efficient than the uniform cost search (the best non-heuristic strategy). In case where memory efficiency is very important, A* level sum search does fewest node expansions and creates fewest nodes significantly outperforming any non-heuristic strategy (including non-optimal ones).
+The A* search with ignore preconditions heuristic is probably the best optimal search strategy for most cases - it is the fastest and the second most memory efficient. In cases where memory efficiency is critical and the speed is less important, the A* search with level sum heuristic should be used. The uninformed search strategies perform significantly worse.
+
+\subsection{Time complexity}
+
+The time complexity for the search strategies vary widely. Solving just 3 problems does not give nearly enought information to make general conclusions about the speed of the various search strategies, however some search strategies concistently perfomed better than others. This time it is not clear if the informed search strategies have advantage over the uninformed strategies - the heuristic greedy best-first graph search was fastest in the Problem 2, but the uninformed depth-first graph search was the fastest in Problem 3, while Problem 1 is not usefull for determining the time complexity since most of the strategies found the solution in around 0.01 seconds. The problem is with the results of the Problem 3 - the depth-first graph search found a very bad plan with a length of 571, but managed to do it very fast and without expanding many nodes.
+
+\paragraph{Optimality}
+
+The two fastest search strategies - greedy best-first graph search and depth-first graph search are not optimal. However, the A* search with ignore preconditions heuristic is quite fast too - in Problem 2 it outperformed the depth-first graph search and in Problem 3 it was just 1.2 times slower than the greedy best-first graph search. 
+
+\paragraph{Memory complexity}
+
+The memory efficiency of the algorithms is not clear. Again, the two fastest strategies are not very memory efficient and it is not clear which one is the most memory efficient. The greedy best-first graph search is quite memory efficient and A* search with ignore preconditions heuristic is quite similar. 
+
+\paragraph{Overall performance}
+
+The greedy best-first graph search is probably the fastest of the algorithms with the A* search with ignore preconditions heuristic performing similarly but a bit worse. On the other hand the A* search with ignore preconditions heuristic is optimal. It is hard to determine the true performance of the depth-first graph search - it is very fast in Problem 3 and not impressive in Problem 2.
+
+\subsection{Memory complexity}
+
+The A* search with level sum heuristic is clearly the best search strategy if memory complexity is an issue. It is many times more memory efficient than other strategies.
+
+\paragraph{Optimality}
+
+The A* search with level sum heuristic is an optimal strategy, therefore it is clearly the best choice if memory complexity and optimality is required.
+
+\paragraph{Time complexity}
+
+The A* search with level sum heuristic is one of the slowest search strategies considerably slower than other optimal or fast strategies. There is no strategy which would be simultaneously fast and memory efficient. The A* search with ignore preconditions heuristic has the best tradeoffs - it is one of the fastest and one of the most memory efficient strategies. 
+
+\paragraph{Overall performance}
+
+Clearly the A* search with level sum heuristic is the best strategy if memory efficiency is the most important factor. The A* search with ignore preconditions heuristic is a good choice if the search strategy also has to be fast. As an added bonus both of these strategies are optimal. 
 
 \section{Conclusion and recommendations}
 
 The detailed analysis of the search strategies showed that the heuristic search strategies have a clear advantage. Based on the analysis done in this paper A* search with ignore preconditions heuristic is determined to be the best search strategy for all cases, except when memory efficiency is very important, where A* level sum search is the best.
+
+\printbibliography
 
 \end{document}
